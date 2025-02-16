@@ -1,0 +1,33 @@
+name: Docker CI
+
+on:
+  pull_request:
+    branches:
+      - main  # Runs only when PRs are made to the `main` branch
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Checkout Repository
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      # Set up Docker Buildx (for caching)
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      # Build Docker Image
+      - name: Build Docker Image
+        run: |
+          docker build -t fastapi-genai-ci .
+
+      # Run Tests inside the Container with Secrets
+      - name: Run Tests
+        run: |
+          docker run --rm \
+            -e ENVIRONMENT=development \
+            -e OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }} \
+            -e JWT_SECRET_KEY=${{ secrets.JWT_SECRET_KEY }} \
+            fastapi-genai-ci pytest tests/
