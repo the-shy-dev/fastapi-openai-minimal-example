@@ -175,4 +175,6 @@ cython_debug/
 fastapi-openai-minimal/*
 
 # Secrets
-.env
+.env.development
+.env.testing
+.env.production

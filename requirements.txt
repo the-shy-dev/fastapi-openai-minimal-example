@@ -1,4 +1,5 @@
 fastapi
 uvicorn
 openai
-python-dotenv
+pydantic<2.0 
+fastapi-jwt-auth
